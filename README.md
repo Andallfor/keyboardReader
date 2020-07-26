@@ -9,3 +9,4 @@ if some cmd shift and esc have 0.00s pressed thats bc they were only used for en
 if theres some weird keys thats bc those keys arent supported (they dont have a formal name)
 
 doesnt steal ur info i promise
+also uh i will add the needed dependicies its just that its 3 am and i havent even tested this yet

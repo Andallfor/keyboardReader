@@ -11,7 +11,6 @@ from pynput.keyboard import Key, Listener
 # main class
 class keyTracker():
     def __init__(self):
-        print("Started")
         self.allKeyPresses = [] # tracks every single key press and release
         self.keyInfoDic = {} # backbone of the program, tracks all relevant info on each key (that has been pressed at least once)
         self.combos = [] # tracks all combanations of keys pressed (in a single frame)
@@ -123,17 +122,19 @@ class keyTracker():
         self.listener.stop()
         self.stop = True
 
+        f = open("keyInfo.txt", "w+")
+
         longestKeyHeld = ["null", 0]
         mostAmountOfReleases = ["null", 0]
         mostCommonCombo = [["null"], 0]
 
-        print("\n-------\nKey Info\n")
+        f.write("Key Info\n")
         # print info about how long keys were pressed
         for key in self.keyInfoDic.keys():
             i = self.keyInfoDic[key]
 
             # get percentage of time a key was pressed, and how long in total
-            print(f"{key}: {round(((i.allTimePressed * 100) / self.totalTimePressed), 2)}% | {round(i.maxTimePressed/60, 2)}s")
+            f.write(f"\n{key}: {round(((i.allTimePressed * 100) / self.totalTimePressed), 2)}% | {round(i.maxTimePressed/60, 2)}s")
 
             # get longest time a key was held
             if (i.maxTimePressed/60 > longestKeyHeld[1]):
@@ -179,16 +180,17 @@ class keyTracker():
                 indexInPeriod += 1
 
 
-        print("------\nGeneral Info\n")
-        print(f"Longest key held: {longestKeyHeld[0]} for {longestKeyHeld[1]}s")
-        print(f"Most key presses: {mostAmountOfReleases[0]} x{mostAmountOfReleases[1]}")
-        print(f"Most common combination of keys: {combo[0]}, held for {round(combo[1]/60, 2)}s")
+        f.write("\n\n------\nGeneral Info\n")
+        f.write(f"\nLongest key held: {longestKeyHeld[0]} for {longestKeyHeld[1]}s")
+        f.write(f"\nMost key presses: {mostAmountOfReleases[0]} x{mostAmountOfReleases[1]}")
+        f.write(f"\nMost common combination of keys: {combo[0]}, held for {round(combo[1]/60, 2)}s")
         if (enoughInfoForPPM):
-            print(f"Most key presses per minute: {maxAmountInPeriod}")
-            print(f"Minimum key presses per minute: {minAmountInPeriod}")
-            print(f"Average key presses per minute: {round(holderInPeriod/indexInPeriod, 2)}")
+            f.write(f"\nMost key presses per minute: {maxAmountInPeriod}")
+            f.write(f"\nMinimum key presses per minute: {minAmountInPeriod}")
+            f.write(f"\nAverage key presses per minute: {round(holderInPeriod/indexInPeriod, 2)}")
         else:
-            print("Run the program for more then 2 minutes to recieve data on key presses per minute")
+            f.write("\nRun the program for more then 2 minutes to recieve data on key presses per minute")
+        f.close()
 
 class keyInfo():
     def __init__(self, name, parent):

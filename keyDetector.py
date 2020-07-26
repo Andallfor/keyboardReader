@@ -18,14 +18,12 @@ class keyTracker():
         self.justPressed = False
         self.totalTimePressed = 0
         self.tick = 0
+        self.stop = False
 
         self.listener = Listener(on_press = self.on_press, on_release = self.on_release)
         self.listener.start()
     
     def on_press(self, key):
-        if (key == Key.right):
-            self.end()
-            return
         if (self.canInitNewKey(key) == True):
             self.keyInfoDic.get(key).press()
         self.getCombo() # dont think this will cause any problems srsly
@@ -50,6 +48,12 @@ class keyTracker():
         return False
 
     def update(self):
+                
+        holder = self.getAllKeysCurrentlyPressed()
+        if (len(holder) == 3 and Key.cmd in holder and Key.shift in holder and Key.esc in holder):
+            self.end()
+            return
+        
         self.tick += 1
         if (self.tick == 60):
             self.tick = 0
@@ -116,6 +120,7 @@ class keyTracker():
 
     def end(self):
         self.listener.stop()
+        self.stop = True
 
         longestKeyHeld = ["null", 0]
         mostAmountOfReleases = ["null", 0]
@@ -148,6 +153,7 @@ class keyTracker():
         enoughInfoForPPM = True
         if (len(self.keyHistory) < 120):
             # only display infomation about ppm if the user has been running the program for more then 2 mins
+            # hmm yeah this doesnt seem to work but i cant be bothered lol
             enoughInfoForPPM = False
         else:
             distToEnd = len(self.keyHistory)
@@ -242,3 +248,6 @@ while (True): # wait for the sec to finish, sub the remaning time from 1 mil, th
 
         # actual code
         k.update()
+
+        if (k.stop):
+            break

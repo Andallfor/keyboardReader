@@ -6,6 +6,7 @@ import timeit
 from pynput.keyboard import Key, Listener
 
 # dont ask why theres 3 different time modules im not sure either
+# this is so bad
 
 # main class
 class keyTracker():

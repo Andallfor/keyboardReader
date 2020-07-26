@@ -2,6 +2,7 @@ import datetime
 import math
 import time
 import timeit
+import os
 
 from pynput.keyboard import Key, Listener
 
@@ -122,7 +123,9 @@ class keyTracker():
         self.listener.stop()
         self.stop = True
 
-        f = open("keyInfo.txt", "w+")
+        username = os.getlogin()
+        filePath = os.path.join(f"/Users/{username}/Desktop", "keyInfo.txt")
+        f = open(filePath, "w")
 
         longestKeyHeld = ["null", 0]
         mostAmountOfReleases = ["null", 0]
@@ -191,6 +194,7 @@ class keyTracker():
         else:
             f.write("\nRun the program for more then 2 minutes to recieve data on key presses per minute")
         f.close()
+        print(f)
 
 class keyInfo():
     def __init__(self, name, parent):
